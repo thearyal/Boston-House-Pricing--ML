@@ -44,6 +44,27 @@ def predict_api():
     except (KeyError, ValueError) as e:
         return jsonify({'error': str(e)}), 400
 
+@app.route('/predict', methods=['POST'])
+def predict():
+    try:
+        data = request.form.to_dict()
+
+        new_data = build_frame(data)
+
+        scaled = scaler.transform(new_data)
+
+        output = regmodel.predict(scaled)
+
+        return render_template(
+            'home.html',
+            prediction_text=f'The House Price Prediction is: {output[0]:.2f}'
+        )
+
+    except (KeyError, ValueError) as e:
+        return render_template(
+            'home.html',
+            prediction_text=f'Error: {str(e)}'
+        )
 
 if __name__ == "__main__":
     app.run(debug=True)
