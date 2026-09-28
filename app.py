@@ -55,10 +55,14 @@ def predict():
 
         output = regmodel.predict(scaled)
 
+# Convert thousands of dollars to dollars
+        price = output[0] * 1000
+
         return render_template(
-            'home.html',
-            prediction_text=f'The House Price Prediction is: {output[0]:.2f}'
-        )
+          'home.html',
+         prediction_text=f'Predicted House Price: ${price:,.2f}'
+   
+   )
 
     except (KeyError, ValueError) as e:
         return render_template(
